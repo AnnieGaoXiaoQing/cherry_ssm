@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.1.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+    <!--扫描service包下所有注解类型-->
+    <context:component-scan base-package="com.cherry.service"/>
+    <!--注入数据库相关配置-->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+    <!--数据库连接池-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <!--数据库基本信息配置-->
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <!--链接-->
+        <property name="url" value="${jdbc.url}"/>
+        <!--用户名-->
+        <property name="username" value="${jdbc.username}"/>
+        <!--密码-->
+        <property name="password" value="${jdbc.password}"/>
+        <!--初始化连接数量-->
+        <property name="initialSize" value="${jdbc.retryAttempts}"/>
+        <!--最小连接数-->
+        <property name="minIdle" value="${jdbc.minPoolSize}"/>
+        <!--最大连接数-->
+        <property name="maxActive" value="${jdbc.maxPoolSize}"/>
+        <!--获取连接超时时间-->
+        <property name="maxWait" value="${jdbc.checkoutTimeout}"/>
+    </bean>
+    <!--配置SqlSessionFactory-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--注入数据库连接池-->
+        <property name = "dataSource" ref="dataSource"/>
+        <!--扫描domain包-->
+        <property name="typeAliasesPackage" value="com.cherry.domain"/>
+        <!--扫描mapper配置文件-->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+    </bean>
+    <!--扫描dao接口包，注入到spring容器中-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--注入SqlSessionFactory-->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <!--扫描Dao接口层-->
+        <property name="basePackage" value="com.cherry.dao"/>
+    </bean>
+    <!--配置事务管理器-->
+    <bean id = "transactionManager" class = "org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!--注入数据库连接池-->
+        <property name="dataSource" value="dataSource"/>
+    </bean>
+    <!--配置基于注解的声明式事务-->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+</beans>
