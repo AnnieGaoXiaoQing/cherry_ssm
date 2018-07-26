@@ -1,6 +1,7 @@
 package com.cherry.controller;
 
 import com.cherry.domain.User;
+import com.cherry.service.function.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -8,7 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * Created by gaoxiaoqing on 2018/7/25.
@@ -17,23 +21,15 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/user")
 public class UserController {
 
-    private static Logger logger = LoggerFactory.getLogger(UserController.class);
+    @Resource
+    private UserService userService;
 
-    @RequestMapping(value = "/test",method = RequestMethod.GET)
-    public String test(HttpServletRequest request, Model model){
-        int userId = Integer.parseInt(request.getParameter("id"));
-        System.out.println("userId:"+userId);
-        User user=null;
-        if (userId==1) {
-            user = new User();
-            user.setAge(11);
-            user.setId(1);
-            user.setPassword("123");
-            user.setUserName("javen");
-        }
-
-        logger.debug(user.toString());
-        model.addAttribute("user", user);
-        return "index";
+    @RequestMapping(".do/showUser")
+    public void selectUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        long userId = Long.parseLong(request.getParameter("id"));
+        User user = this.userService.selectUser(userId);
+        response.getWriter().close();
     }
 }
