@@ -9,6 +9,12 @@
         <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/cherry-log-common/pom.xml" />
+        <option value="$PROJECT_DIR$/cherry-log-demo/pom.xml" />
+      </set>
+    </option>
   </component>
   <component name="ProjectResources">
     <resource url="http://www.springframework.org/schema/mvc" location="$PROJECT_DIR$" />
