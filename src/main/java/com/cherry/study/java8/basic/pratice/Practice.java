@@ -1,5 +1,6 @@
 package com.cherry.study.java8.basic.pratice;
 
+import com.alibaba.fastjson.JSON;
 import com.sun.org.apache.regexp.internal.RE;
 
 import java.util.Arrays;
@@ -12,10 +13,10 @@ import static java.util.stream.Collectors.toList;
 
 public class Practice {
     public static void main(String[] args) {
-        Trader raoul = new Trader("Raoul","Cambridge");
-        Trader mario = new Trader("Mario","Milan");
-        Trader alain = new Trader("Alan","Cambridge");
-        Trader brian = new Trader("Brain","Cambridge");
+        Trader raoul = new Trader("Raoul","剑桥");
+        Trader mario = new Trader("Mario","米兰");
+        Trader alain = new Trader("Alan","剑桥");
+        Trader brian = new Trader("Brain","剑桥");
 
         List<Transaction> transactionList = Arrays.asList(
                 new Transaction(brian, 2011,300),
@@ -26,12 +27,12 @@ public class Practice {
                 new Transaction(alain,2012,950)
         );
 
-        //1、2011年所有交易，交易额降序
-        /*List<Transaction> result1 = transactionList.stream()
+        //1、2011年所有交易，金额由小到大排序
+        List<Transaction> result1 = transactionList.stream()
                 .filter(transaction -> transaction.getYear() == 2011)
                 .sorted(Comparator.comparing(Transaction::getValue))
                 .collect(toList());
-        System.out.println("result1 = " + JSON.toJSONString(result1));*/
+        System.out.println("result1 = " + JSON.toJSONString(result1));
         //2、交易员都在哪些城市工作过
         /*List<String> result2 = transactionList.stream()
                                                    .map(transaction -> transaction.getTrader().getCity())
@@ -71,7 +72,7 @@ public class Practice {
                                                            .reduce(Integer ::max);
         System.out.println("result = " + result);*/
         //8、找交易额最小的交易
-        Optional<Transaction> transaction = transactionList.stream().min(Comparator.comparing(Transaction::getValue));
-        System.out.println("result = " + transaction);
+        /*Optional<Transaction> transaction = transactionList.stream().min(Comparator.comparing(Transaction::getValue));
+        System.out.println("result = " + transaction);*/
     }
 }
