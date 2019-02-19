@@ -2,6 +2,7 @@ package com.cherry.study.java8;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -20,8 +21,6 @@ public class TestStreamAPI2 {
             new Employee(102,"李四",22,5555.55),
             new Employee(104,"王五",3,3333.33),
             new Employee(105,"赵六",55,1111.11),
-            new Employee(106,"田七",22,4444.44),
-            new Employee(106,"田七",22,4444.44),
             new Employee(106,"田七",22,4444.44)
     );
 
@@ -105,4 +104,59 @@ public class TestStreamAPI2 {
                 .map(Employee::getName)
                 .forEach(System.out::println);
     }
+
+    /**
+     * flatmap-接收一个函数作为参数，将流中每个值都换成另一个流，然后把所有流连接成一个流
+     * 即在一个流中
+     * map、flatMap 类似于 集合的add和addAll
+     */
+    @Test
+    public void testFlatMap(){
+        List<String> list = Arrays.asList("aa","bb","cc","dd");
+        //嵌套流
+
+        //使用Map:元素转流加入 {{a,a},{b,b},{c,c},{d,d}}
+        Stream<Stream<Character>> streamStream = list.stream().map(TestStreamAPI2::filterCharacter);
+        streamStream.forEach(characterStream -> {
+            characterStream.forEach(System.out::println);
+        });
+        System.out.println("----------------------------------");
+
+        //使用FlatMap:单个元素加入流  {a,a,b,b,c,c,d,d}
+        Stream<Character> streamStream1 = list.stream().flatMap(TestStreamAPI2::filterCharacter);
+        streamStream1.forEach(System.out::println);
+    }
+
+
+    public static Stream<Character> filterCharacter(String str){
+        List<Character> list = new ArrayList<>();
+        for (Character character : str.toCharArray()){
+            list.add(character);
+        }
+        return list.stream();
+    }
+
+    /**
+     * 排序
+     * sorted()-自然排序（Comparable）-字典序
+     * sorted(Comparator com) -定制排序（Comparator）
+     */
+    @Test
+    public void testSort(){
+        List<String> list = Arrays.asList("cc","dd","aa","bb");
+        list.stream().sorted().forEach(System.out::println);
+        System.out.println("==================================");
+
+        emps.stream()
+                .distinct()
+                .sorted((e1,e2)->{
+                    if (e1.getAge().equals(e2.getAge())){
+                        return e1.getName().compareTo(e2.getName());
+                    }else {
+                        //-e1.getAge()代表降序
+                        return e1.getAge().compareTo(e2.getAge());
+                    }
+                }).forEach(System.out::println);
+    }
+
 }

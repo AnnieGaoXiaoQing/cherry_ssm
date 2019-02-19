@@ -7,13 +7,15 @@ import java.util.Objects;
  */
 public class Employee {
 
-    private int id;
+    private Integer id;
 
     private String name;
 
-    private int age;
+    private Integer age;
 
-    private double salary;
+    private Double salary;
+
+    private Status status;
 
     public Employee() {
     }
@@ -29,11 +31,19 @@ public class Employee {
         this.salary = salary;
     }
 
-    public int getId() {
+    public Employee(Integer id, String name, Integer age, Double salary, Status status) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.salary = salary;
+        this.status = status;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -45,20 +55,28 @@ public class Employee {
         this.name = name;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
-    public double getSalary() {
+    public Double getSalary() {
         return salary;
     }
 
-    public void setSalary(double salary) {
+    public void setSalary(Double salary) {
         this.salary = salary;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     @Override
@@ -76,14 +94,20 @@ public class Employee {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Employee employee = (Employee) o;
-        return id == employee.id &&
-                age == employee.age &&
+        return age == employee.age &&
                 Double.compare(employee.salary, salary) == 0 &&
+                Objects.equals(id, employee.id) &&
                 Objects.equals(name, employee.name);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, name, age, salary);
+    }
+
+    public enum Status{
+        FREE,
+        BUSY,
+        VOCATION
     }
 }
